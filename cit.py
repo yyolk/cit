@@ -146,10 +146,13 @@ def save_items():
         json_projects, status, response = backend.items.get_uncompleted_items(token, project_id)
 
         for task_dict in json_projects:
+            #Fix unicode problem
+            safe_str = task_dict['content'].encode('ascii', 'ignore')
+
             config_task.add_section(str(task_dict['id']))
             config_task.set(str(task_dict['id']), 'id', task_dict['id'])
             config_task.set(str(task_dict['id']), 'project_id', task_dict['project_id'])
-            config_task.set(str(task_dict['id']), 'content', task_dict['content'])
+            config_task.set(str(task_dict['id']), 'content', safe_str)
             config_task.set(str(task_dict['id']), 'user_id', task_dict['user_id'])
             config_task.set(str(task_dict['id']), 'collapsed', task_dict['collapsed'])
             config_task.set(str(task_dict['id']), 'priority', task_dict['priority'])
@@ -303,11 +306,14 @@ def save_projects():
     token = conf.api_token
     json_projects, status, response = backend.project.get_info(token)
 
+    print json_projects
+
     config = ConfigParser.RawConfigParser()
     for project_dict in json_projects:
+        safe_str = project_dict['name'].encode('ascii', 'ignore')
         config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
         config.set(str(project_dict['id']), 'id', project_dict['id'])
-        config.set(str(project_dict['id']), 'name', project_dict['name'])
+        config.set(str(project_dict['id']), 'name', safe_str)
         config.set(str(project_dict['id']), 'user_id', project_dict['user_id'])
         config.set(str(project_dict['id']), 'cache_count', project_dict['cache_count'])
         config.set(str(project_dict['id']), 'color', project_dict['color'])
