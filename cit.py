@@ -80,8 +80,8 @@ def main(args):
         elif args.save_info:
             save_info(args.save_info)
         elif args.save_all:
-            save_items()
             save_projects()
+            save_items()
     else:
         print "Bakalim nasil"
 
