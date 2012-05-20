@@ -7,14 +7,8 @@ cit is a simple CLI(command line interface) for the web todo list application
 todoist.com.
 
 The name is abbreviated from cli and todist. It will designed to be used easily
-and should have the same feeling like using Todoist.com.
-
-Part of the backend is based on Nicholas Schiefer's pydoist
-(https://github.com/nickname/pydoist)
-
-It's not the same codebase, you will encounter a whole different set of
-functions. I will and have change the code for my own style(Just answered why I
-didn't fork it)
+and should have the same feeling like using Todoist.com. The backend is based
+on Nicholas Schiefer's pydoist (https://github.com/nickname/pydoist)
 
 
 Features
@@ -27,9 +21,18 @@ code.  As for now, the development branch is able to
 * Delete tasks
 * Delete projects
 * Rename currently projects
+* List tasks in each project (can accept multiple projects as option)
 * List projects
-* List tasks in each project ( can accept multiple projects as option)
-* Download all your projects and tasks
+
+Todo
+----
+
+* Store login credentials encrypted
+* "Done" should be implemented
+* Unicode support
+* Support premium features
+* Better solution to store data (currently configparser)
+* .. add yours
 
 
 Requires
@@ -42,6 +45,9 @@ Requires
 Usage
 _____
 
+**ASCII ONLY!** Unicode characters are not supported for now. Please be aware of 
+this problem before you begin to use.
+
 You can list all options via the help option::
 
     cit -h
@@ -50,12 +56,10 @@ Assuming that you've already have an account on Todoist.com. For the first
 setup just run::
 
     cit save -i username password
-    cit save -a
 
 This will download all tasks,projects and user information in your home directory.
-But be cautios as your password and api token is stored in ~/.citrc in plaintext.
-To sync cit with todoist.com simple just enter(you might need this if you have
-changes in the website ::
+But be cautios as your password and api token is stored in ~/.citrc in **plaintext**.
+For re-download of all your task just run::
 
     cit save -a
 
@@ -68,19 +72,16 @@ Every projects has a number left aligned. This shows the order of the projects.
 name to the *ls* command::
 
     cit ls 1
-    cit ls Project
+    cit ls ProjectName
 
+Creating a new task is also very simple. Just write it and append the project
+name or order number at the end. (Use quotes only for items that contains
+special characters.)::
 
-Adding task is also very simple. Just write it down and append the project name
-or order number at the end. **cit** will automatically detect your task. You
-don't have to use quotes or anything like that (Use quotes only for items that
-contains special characters.). You can also append the order number of a
-project if you know it::
-
-    cit add This is a task +Project
     cit add This is a task +1
+    cit add This is a task +ProjectName
 
-To add a project with the name *Work*::
+Creating a new project with the name *Work*::
 
     cit add -p Work
 
@@ -97,6 +98,7 @@ number of this project (assume it has 3)::
 
     cit rm -p Freelance
     cit rm -p 3
+
 
 
 
