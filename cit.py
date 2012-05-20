@@ -73,12 +73,10 @@ def main(args):
 
 
     if not args.save:
-        if args.save_items:
-            save_items()
-        elif args.save_projects:
-            save_projects()
-        elif args.save_info:
+        if args.save_info:
             save_info(args.save_info)
+            save_projects()
+            save_items()
         elif args.save_all:
             save_projects()
             save_items()
@@ -496,16 +494,6 @@ def argument():
                         metavar=('username', 'password'),
                         dest='save_info',
                         help="Download and store user informations to \"%s\"" % conf_file)
-    parser_save.add_argument('-t',
-                        action='store_true',
-                        default=False,
-                        dest='save_items',
-                        help="Download and store tasks to \"%s\"" % task_file)
-    parser_save.add_argument('-p',
-                        action='store_true',
-                        default=False,
-                        dest='save_projects',
-                        help="Download and store projects to \"%s\"" % project_file)
 
     parser_update = subparsers.add_parser('up', help='Update tasks and projects')
     parser_update.add_argument('up', nargs='*') 
@@ -527,9 +515,7 @@ def argument():
                         save=None,
                         delete_project=None,
                         delete_items=None,
-                        save_items=None,
                         save_all=None,
-                        save_projects=None,
                         save_info=None,
                         rename_project=None)
 
