@@ -304,8 +304,6 @@ def save_projects():
     token = conf.api_token
     json_projects, status, response = backend.project.get_info(token)
 
-    print json_projects
-
     config = ConfigParser.RawConfigParser()
     for project_dict in json_projects:
         safe_str = project_dict['name'].encode('ascii', 'ignore')
