@@ -272,7 +272,7 @@ def add_item(args):
             if not status:
                 print "ERROR: Not able to add task to Todoist.com" % deleted
             elif status[1] == 200:
-                print "Content is added to project: \"%s\"" % project_name
+                print "Task is added to project: \"%s\"" % project_name
 
     # Save item to task_file
     #TODO Create a function for this kind of task
@@ -293,7 +293,6 @@ def add_item(args):
     config_task.set(str(task_dict['id']), 'date_string', task_dict['date_string'])
     with open(task_file, 'ab') as configfile:
         config_task.write(configfile)
-    print status[0]
 
 
 def save_projects():
