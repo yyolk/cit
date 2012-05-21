@@ -26,10 +26,6 @@ def main(args):
             return "Before you continue enter your loging credentials\n" \
                    "usage: ./cit.py save -i <email> <password>"
 
-    # Debugging 
-#    print args
-#    print
-
     if args.add:
         add_item(args.add)
     # add_project is None by default
@@ -82,7 +78,7 @@ def main(args):
             save_projects()
             save_items()
     else:
-        print "Bakalim nasil"
+        print "Options are..."
 
 def save_info(save_user_args):
     username = save_user_args[0]
