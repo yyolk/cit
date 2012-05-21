@@ -23,7 +23,8 @@ def main(args):
         try:
             save_info(args.save_info)
         except:
-            return "Please save username and password to configuration file\nusage: ./cit.py --save-info username password"
+            return "Before you continue enter your loging credentials\n" \
+                   "usage: ./cit.py save -i <email> <password>"
 
     # Debugging 
 #    print args
