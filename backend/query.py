@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import connect
+from . import connect
 
 def query(api_token, queries):
     #TODO queries should be set by default to the users settings

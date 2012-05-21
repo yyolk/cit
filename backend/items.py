@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import connect
+from . import connect
 
 def get_uncompleted_items(api_token, project_id, js_date=None):
     params={'token': api_token, 'project_id': project_id}

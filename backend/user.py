@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import connect
+from . import connect
 
 class User:
     def __init__(self, email, password):

@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf
 
-import connect
+from . import connect
 
 def get_labels(token):
     params={'token': token}

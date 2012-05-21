@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import connect
+from . import connect
 
 def add_note(api_token, item_id, content):
     params={'token': api_token, 'item_id': item_id, 'content': content}

@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import user
-import connect
+from . import user
+from . import connect
 
 def get_info(api_token):
     json_data, status, response = connect.connect(url="getProjects", params={'token': api_token})

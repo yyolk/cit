@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import os
 import sys
 import json
 import argparse
-import ConfigParser
+import configparser
 import textwrap
 
 import backend.user
@@ -36,7 +36,7 @@ def main(args):
     elif args.add_project is not None:
         # Check for empty string
         if not args.add_project:
-            print "Please define project"
+            print("Please define project")
             return
         else:
             add_project(args.add_project)
@@ -53,16 +53,16 @@ def main(args):
     elif args.delete_project is not None:
         # Check for empty string
         if not args.delete_project:
-            print "Please define project"
+            print("Please define project")
             return
         else:
             delete_project(args.delete_project)
 
     if args.rename_project is not None:
         if len(args.rename_project) is not 3:
-            print "Please seperate the projects to be renamed with a comma"
-            print
-            print "Example: cit up -p old_project, new_project"
+            print("Please seperate the projects to be renamed with a comma")
+            print()
+            print("Example: cit up -p old_project, new_project")
             return
         else:
             rename_project(args.rename_project)
@@ -70,7 +70,7 @@ def main(args):
     elif args.up:
         pass
     elif args.up is not None:
-        print "Options are..."
+        print("Options are...")
 
 
     if not args.save:
@@ -82,7 +82,7 @@ def main(args):
             save_projects()
             save_items()
     else:
-        print "Bakalim nasil"
+        print("Bakalim nasil")
 
 def save_info(save_user_args):
     username = save_user_args[0]
@@ -90,7 +90,7 @@ def save_info(save_user_args):
 
     user = backend.user.User(username, password)
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.add_section('user_info')
     config.set('user_info', 'username', username)
     config.set('user_info', 'password', password)
@@ -136,9 +136,9 @@ def save_items():
 
     conf = GetUserInfo()
     token = conf.api_token
-    config_project = ConfigParser.RawConfigParser()
+    config_project = configparser.RawConfigParser()
     config_project.read(project_file)
-    config_task = ConfigParser.RawConfigParser()
+    config_task = configparser.RawConfigParser()
     config_task.read(task_file)
 
     for project_id in config_project.sections():
@@ -164,14 +164,14 @@ def save_items():
         with open(task_file, 'wb') as configfile:
             config_task.write(configfile)
 
-    print "All uncompleted tasks are downloaded and stored to %s" % task_file
+    print("All uncompleted tasks are downloaded and stored to %s" % task_file)
 
 def list_items(args):
     conf = GetUserInfo()
     token = conf.api_token
-    config_project = ConfigParser.SafeConfigParser()
+    config_project = configparser.SafeConfigParser()
     config_project.read(project_file)
-    config_task = ConfigParser.SafeConfigParser()
+    config_task = configparser.SafeConfigParser()
     config_task.read(task_file)
 
     item_dict = {}
@@ -191,26 +191,29 @@ def list_items(args):
 
                     if id_name == project_id_task:
                         if print_project:
-                            print
-                            print colorize(textwrap.fill(project_name, initial_indent='      '), "bold")
-                            print colorize(textwrap.fill(('-' * len(project_name)), initial_indent='      '), "bold")
+                            print()
+                            print(colorize(textwrap.fill(project_name, initial_indent='      '), "bold"))
+                            print(colorize(textwrap.fill(('-' * len(project_name)), initial_indent='      '), "bold"))
                         print_project = False
                         content = config_task.get(sections, 'content')
                         item_order = config_task.get(sections, 'item_order')
                         indent = config_task.get(sections, 'indent')
 
-                        print "(%s)" % item_order.rjust(2),
-                        print '  ' * (int(indent) - 1),
-                        print textwrap.fill(content, initial_indent='', subsequent_indent='      ')
-    print
+                        import sys
+
+
+                        print("(%s)" % item_order.rjust(2), end = " ")
+                        print('  ' * (int(indent) - 1), end="")
+                        print(textwrap.fill(content, initial_indent='', subsequent_indent='      '))
+    print()
 
 def delete_items(args):
     conf = GetUserInfo()
     token = conf.api_token
 
-    config_project = ConfigParser.RawConfigParser()
+    config_project = configparser.RawConfigParser()
     config_project.read(project_file)
-    config_task = ConfigParser.RawConfigParser()
+    config_task = configparser.RawConfigParser()
     config_task.read(task_file)
 
     item_to_delete = []
@@ -235,7 +238,7 @@ def delete_items(args):
                     item_order_task = config_task.get(sections, 'item_order')
 
                     if project_id == project_id_task and item_order_task == task:
-                        print "removed section: %s" % sections
+                        print("removed section: %s" % sections)
                         obsolote_task_ids.append(sections)
                         config_task.remove_section(sections) # Remove this sections
 
@@ -247,7 +250,7 @@ def delete_items(args):
 def add_item(args):
     conf = GetUserInfo()
     token = conf.api_token
-    config_project = ConfigParser.RawConfigParser()
+    config_project = configparser.RawConfigParser()
     config_project.read(project_file)
 
     # Filter out project names and convert the list to string
@@ -257,10 +260,10 @@ def add_item(args):
         # Projects are defined via the plus sign ...  +Project1 +Example
     project = [arg[1:] for arg in args if arg.startswith("+")]
     if not project:
-        print "Project is not given, append the name or the order" 
-        print "of the project via a plus (+) prefix\n"
-        print "Example:  cit add Take out the Trash +Personal"
-        print "          cit add Take out the Trash +1"
+        print("Project is not given, append the name or the order") 
+        print("of the project via a plus (+) prefix\n")
+        print("Example:  cit add Take out the Trash +Personal")
+        print("          cit add Take out the Trash +1")
         return
 
     # For now support add items only to "one" project
@@ -271,14 +274,14 @@ def add_item(args):
         if project_name == project[0] or project_order == project[0]:
             status  = backend.items.add_item(token, project_id, content, None, priority="1")
             if not status:
-                print "ERROR: Not able to add task to Todoist.com" % deleted
+                print("ERROR: Not able to add task to Todoist.com" % deleted)
             elif status[1] == 200:
-                print "Task is added to project: \"%s\"" % project_name
+                print("Task is added to project: \"%s\"" % project_name)
 
     # Save item to task_file
     #TODO Create a function for this kind of task
     task_dict = status[0]
-    config_task = ConfigParser.RawConfigParser()
+    config_task = configparser.RawConfigParser()
     config_task.read(task_file)
     config_task.add_section(str(task_dict['id']))
     config_task.set(str(task_dict['id']), 'id', task_dict['id'])
@@ -304,7 +307,7 @@ def save_projects():
     token = conf.api_token
     json_projects, status, response = backend.project.get_info(token)
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     for project_dict in json_projects:
         safe_str = project_dict['name'].encode('ascii', 'ignore')
         config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
@@ -320,10 +323,10 @@ def save_projects():
     with open(project_file, 'wb') as configfile:
         config.write(configfile)
 
-    print "All projects are downloaded and stored to %s" % project_file
+    print("All projects are downloaded and stored to %s" % project_file)
 
 def list_projects():
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read(project_file)
 
     for id_name in config.sections():
@@ -331,14 +334,14 @@ def list_projects():
         indent = config.get(id_name, 'indent')
         item_order = config.get(id_name, 'item_order')
 
-        print "(%s)" % item_order.rjust(2),
-        print '  ' * (int(indent) - 1),
-        print textwrap.fill(section_name, initial_indent='', subsequent_indent='      ')
+        print("(%s)" % item_order.rjust(2), end=' ')
+        print('  ' * (int(indent) - 1), end=' ')
+        print(textwrap.fill(section_name, initial_indent='', subsequent_indent='      '))
 
 def delete_project(args):
     conf = GetUserInfo()
     token = conf.api_token
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read(project_file)
 
     #TODO: find a more elegant solution, I hate nested for loops
@@ -350,7 +353,7 @@ def delete_project(args):
             deleted = False
             if project.isdigit():
                 if item_order == project:
-                    print "removed section: %s" % id_name
+                    print("removed section: %s" % id_name)
                     config.remove_section(id_name) # Remove also from project_file
                     status = backend.project.delete_project(token, id_name)
                     deleted = project_name
@@ -364,9 +367,9 @@ def delete_project(args):
             # status=False , status = ('ok', '200', 'OK') 
             if deleted:
                 if not status:
-                    print "ERROR: Not able to delete \"%s\" from Todoist.com" % deleted
+                    print("ERROR: Not able to delete \"%s\" from Todoist.com" % deleted)
                 elif status[1] == 200:
-                    print "\"%s\" is deleted from Todoist.com" % deleted
+                    print("\"%s\" is deleted from Todoist.com" % deleted)
 
     # we have removed sections, thus write changes
     with open(project_file, 'wb') as configfile:
@@ -375,7 +378,7 @@ def delete_project(args):
 def rename_project(projects):
     conf = GetUserInfo()
     token = conf.api_token
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read(project_file)
 
     # Seperate via ",", however that might be changed
@@ -390,13 +393,13 @@ def rename_project(projects):
             status = backend.project.update_project(token, id_name, projects[1].strip())
 
     if not status:
-        print "ERROR: Not able to rename \"%s\" at Todoist.com" % projects[0].strip()
+        print("ERROR: Not able to rename \"%s\" at Todoist.com" % projects[0].strip())
     elif status[1] == 200:
-        print "\"%s\" is renamed to \"%s\"" % (projects[0].strip(), projects[1].strip())
+        print("\"%s\" is renamed to \"%s\"" % (projects[0].strip(), projects[1].strip()))
 
     # Add project to project_file
     project_dict = status[0]
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
     config.set(str(project_dict['id']), 'id', project_dict['id'])
     config.set(str(project_dict['id']), 'name', project_dict['name'])
@@ -420,13 +423,13 @@ def add_project(project_name):
     # status has two types, the if/else condition must start with status
     # status=False , status ('ok', '200', 'OK') 
     if not status:
-        print "ERROR: Not able to create \"%s\" at Todoist.com" % project_name
+        print("ERROR: Not able to create \"%s\" at Todoist.com" % project_name)
     elif status[1] == 200:
-        print "\"%s\" is created at Todoist.com" % project_name
+        print("\"%s\" is created at Todoist.com" % project_name)
 
     # Add project to project_file
     project_dict = status[0]
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
     config.set(str(project_dict['id']), 'id', project_dict['id'])
     config.set(str(project_dict['id']), 'name', project_dict['name'])
@@ -523,7 +526,7 @@ def argument():
 class GetUserInfo():
     def __init__(self):
 
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read(conf_file)
         self.username = config.get('user_info', 'username')
         self.password = config.get('user_info', 'password')
