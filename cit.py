@@ -40,8 +40,8 @@ def main(args):
     if args.ls:
         list_project_items(args.ls)
     elif args.ls is not None:
-        # If no arguments are given show the projects
-        list_projects()
+        # If no arguments are given show all items
+        list_all_items()
 
     if args.rm:
         delete_items(args.rm)
@@ -161,6 +161,32 @@ def save_items():
             config_task.write(configfile)
 
     print "All uncompleted tasks are downloaded and stored to %s" % task_file
+
+def list_all_items():
+    conf = GetUserInfo()
+    token = conf.api_token
+    config_project = ConfigParser.SafeConfigParser()
+    config_project.read(project_file)
+    config_task = ConfigParser.SafeConfigParser()
+    config_task.read(task_file)
+
+    print "Id  Project    Item"
+    print "--  -------    ----"
+    for id_name in config_project.sections():
+        project_name = config_project.get(id_name, 'name')
+
+        for sections in config_task.sections():
+            project_id_task = config_task.get(sections, 'project_id')
+
+            if id_name == project_id_task:
+                content = config_task.get(sections, 'content')
+                item_order = config_task.get(sections, 'item_order')
+                indent = config_task.get(sections, 'indent')
+
+                print item_order.rjust(2),
+                print '  ' * (int(indent) - 1),
+                print project_name.ljust(10),
+                print content
 
 def list_project_items(args):
     conf = GetUserInfo()
