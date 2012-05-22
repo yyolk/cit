@@ -43,6 +43,14 @@ def main(args):
         # If no arguments are given show all items
         list_all_items()
 
+    if args.projects:
+        print "You probably want to run 'cit projects'"
+        pass
+    elif args.projects is not None:
+        list_projects()
+
+
+
     if args.rm:
         delete_items(args.rm)
     # add_project is None by default
@@ -489,18 +497,20 @@ def argument():
 
 
     parser_del = subparsers.add_parser('rm', help='Remove tasks and projects')
-    parser_del.add_argument('rm', nargs='*') 
+    parser_del.add_argument('rm', nargs='*')
     parser_del.add_argument('-p', '--delete-project',
                             nargs='*',
                             action='store',
                             help="Delete project")
 
-    parser_list = subparsers.add_parser('ls', help='List tasks and projects,')
-    parser_list.add_argument('ls', nargs='*') 
+    parser_list = subparsers.add_parser('ls', help='List all uncompleted tasks')
+    parser_list.add_argument('ls', nargs='*')
 
+    parser_projects = subparsers.add_parser('projects', help='List all available projects,')
+    parser_projects.add_argument('projects', nargs='*')
 
     parser_save = subparsers.add_parser('save', help='Store User informations, tasks, projects')
-    parser_save.add_argument('save', nargs='*') 
+    parser_save.add_argument('save', nargs='*')
     parser_save.add_argument('-a',
                         action='store_true',
                         default=False,
@@ -514,7 +524,7 @@ def argument():
                         help="Download and store user informations to \"%s\"" % conf_file)
 
     parser_update = subparsers.add_parser('up', help='Update tasks and projects')
-    parser_update.add_argument('up', nargs='*') 
+    parser_update.add_argument('up', nargs='*')
     parser_update.add_argument('-p', '--rename-project',
                         nargs='*',
                         action='store',
