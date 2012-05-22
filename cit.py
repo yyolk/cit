@@ -196,7 +196,6 @@ def list_project_items(args):
     config_task = ConfigParser.SafeConfigParser()
     config_task.read(task_file)
 
-    # +foo means "project foo"
     # args = ["+work", "+personal"] --> bare_project = ["work", "personal"]
     bare_project = [arg[1:] for arg in args if arg.startswith("+")]
 
@@ -223,7 +222,7 @@ def list_project_items(args):
                         print "(%s)" % item_order.rjust(2),
                         print '  ' * (int(indent) - 1),
                         print textwrap.fill(content, initial_indent='', subsequent_indent='      ')
-    print
+
 
 def delete_items(args):
     conf = GetUserInfo()
@@ -529,6 +528,7 @@ def argument():
     parser.set_defaults(add=None,
                         add_project=None,
                         ls=None,
+                        projects=None,
                         rm=None,
                         up=None,
                         save=None,

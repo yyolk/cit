@@ -63,16 +63,14 @@ For re-download of all your task just run::
 
     cit save -a
 
-To list your projects::
+To list all uncompleted items::
 
     cit ls
 
-Every projects has a number left aligned. This shows the order of the projects.
-**cit** makes it easy to list your task. Just append the number or the project
-name to the *ls* command::
+You can easily filter your items by project names. It also accepts multiple projects
+The command below show only items that belongs to the "work" and "private" project::
 
-    cit ls 1
-    cit ls ProjectName
+    cit ls +work +private
 
 Creating a new task is also very simple. Just write it and append the project
 name or order number at the end. (Use quotes only for items that contains
