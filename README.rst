@@ -72,6 +72,10 @@ The command below show only items that belongs to the "work" and "private" proje
 
     cit ls +work +private
 
+To show all available projects::
+
+    cit projects
+
 Creating a new task is also very simple. Just write it and append the project
 name or order number at the end. (Use quotes only for items that contains
 special characters.)::
