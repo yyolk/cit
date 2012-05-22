@@ -37,10 +37,10 @@ def main(args):
         else:
             add_project(args.add_project)
 
-    # If no arguments are given show the projects
     if args.ls:
-        list_items(args.ls)
+        list_project_items(args.ls)
     elif args.ls is not None:
+        # If no arguments are given show the projects
         list_projects()
 
     if args.rm:
@@ -162,7 +162,7 @@ def save_items():
 
     print "All uncompleted tasks are downloaded and stored to %s" % task_file
 
-def list_items(args):
+def list_project_items(args):
     conf = GetUserInfo()
     token = conf.api_token
     config_project = ConfigParser.SafeConfigParser()
@@ -170,17 +170,16 @@ def list_items(args):
     config_task = ConfigParser.SafeConfigParser()
     config_task.read(task_file)
 
-    item_dict = {}
-    item_list = []
+    # +foo means "project foo"
+    # args = ["+work", "+personal"] --> bare_project = ["work", "personal"]
+    bare_project = [arg[1:] for arg in args if arg.startswith("+")]
 
-    for project_arg in args:
+    for project_arg in bare_project:
 
         for id_name in config_project.sections():
             project_name = config_project.get(id_name, 'name')
-            project_order = config_project.get(id_name, 'item_order')
 
-            # Just choose project from the list ( it can be an order or the project name itself)
-            if project_arg.isdigit() and project_arg == project_order:
+            if project_arg == project_name:
                 print_project = True
                 for sections in config_task.sections():
                     project_id_task = config_task.get(sections, 'project_id')
@@ -250,7 +249,7 @@ def add_item(args):
     content = [arg for arg in args if not arg.startswith("+")]
     content = " ".join(content)
 
-        # Projects are defined via the plus sign ...  +Project1 +Example
+    # Projects are defined via the plus sign ...  +Project1 +Example
     project = [arg[1:] for arg in args if arg.startswith("+")]
     if not project:
         print "Project is not given, append the name or the order" 
