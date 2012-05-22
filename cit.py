@@ -231,6 +231,23 @@ def list_project_items(args):
                         print '  ' * (int(indent) - 1),
                         print textwrap.fill(content, initial_indent='', subsequent_indent='      ')
 
+def list_projects():
+    config = ConfigParser.RawConfigParser()
+    config.read(project_file)
+
+    print "Project    Items"
+    print "-------    -----"
+
+    for id_name in config.sections():
+        section_name = config.get(id_name, 'name')
+        indent = config.get(id_name, 'indent')
+        item_order = config.get(id_name, 'item_order')
+        total_items = config.get(id_name, 'cache_count')
+
+        print section_name.ljust(10),
+        print '  ' * (int(indent) - 1),
+        print total_items.rjust(4)
+
 
 def delete_items(args):
     conf = GetUserInfo()
@@ -349,19 +366,6 @@ def save_projects():
         config.write(configfile)
 
     print "All projects are downloaded and stored to %s" % project_file
-
-def list_projects():
-    config = ConfigParser.RawConfigParser()
-    config.read(project_file)
-
-    for id_name in config.sections():
-        section_name = config.get(id_name, 'name')
-        indent = config.get(id_name, 'indent')
-        item_order = config.get(id_name, 'item_order')
-
-        print "(%s)" % item_order.rjust(2),
-        print '  ' * (int(indent) - 1),
-        print textwrap.fill(section_name, initial_indent='', subsequent_indent='      ')
 
 def delete_project(args):
     conf = GetUserInfo()
