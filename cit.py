@@ -302,18 +302,15 @@ def add_item(args):
     # Projects are defined via the plus sign ...  +Project1 +Example
     project = [arg[1:] for arg in args if arg.startswith("+")]
     if not project:
-        print "Project is not given, append the name or the order" 
-        print "of the project via a plus (+) prefix\n"
+        print "Project is not given, append the name via a plus (+) prefix\n"
         print "Example:  cit add Take out the Trash +Personal"
-        print "          cit add Take out the Trash +1"
         return
 
     # For now support add items only to "one" project
     for project_id in config_project.sections():
         project_name = config_project.get(project_id, 'name')
-        project_order = config_project.get(project_id, 'item_order')
 
-        if project_name == project[0] or project_order == project[0]:
+        if project_name == project[0]:
             status  = backend.items.add_item(token, project_id, content, None, priority="1")
             if not status:
                 print "ERROR: Not able to add task to Todoist.com" % deleted
@@ -339,6 +336,38 @@ def add_item(args):
     config_task.set(str(task_dict['id']), 'date_string', task_dict['date_string'])
     with open(task_file, 'ab') as configfile:
         config_task.write(configfile)
+
+
+def add_project(project_name):
+
+    conf = GetUserInfo()
+    token = conf.api_token
+
+    project_name = " ".join(project_name)
+    status = backend.project.add_project(token, project_name)
+
+    # status has two types, the if/else condition must start with status
+    # status=False , status ('ok', '200', 'OK') 
+    if not status:
+        print "ERROR: Not able to create \"%s\" at Todoist.com" % project_name
+    elif status[1] == 200:
+        print "\"%s\" is created at Todoist.com" % project_name
+
+    # Add project to project_file
+    project_dict = status[0]
+    config = ConfigParser.RawConfigParser()
+    config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
+    config.set(str(project_dict['id']), 'id', project_dict['id'])
+    config.set(str(project_dict['id']), 'name', project_dict['name'])
+    config.set(str(project_dict['id']), 'user_id', project_dict['user_id'])
+    config.set(str(project_dict['id']), 'cache_count', project_dict['cache_count'])
+    config.set(str(project_dict['id']), 'color', project_dict['color'])
+    config.set(str(project_dict['id']), 'indent', project_dict['indent'])
+    config.set(str(project_dict['id']), 'item_order', project_dict['item_order'])
+    config.set(str(project_dict['id']), 'collapsed', project_dict['collapsed'])
+    with open(project_file, 'ab') as configfile:
+        config.write(configfile)
+
 
 
 def save_projects():
@@ -425,36 +454,6 @@ def rename_project(projects):
         print "ERROR: Not able to rename \"%s\" at Todoist.com" % projects[0].strip()
     elif status[1] == 200:
         print "\"%s\" is renamed to \"%s\"" % (projects[0].strip(), projects[1].strip())
-
-    # Add project to project_file
-    project_dict = status[0]
-    config = ConfigParser.RawConfigParser()
-    config.add_section(str(project_dict['id'])) # configparser does not accept int as section name
-    config.set(str(project_dict['id']), 'id', project_dict['id'])
-    config.set(str(project_dict['id']), 'name', project_dict['name'])
-    config.set(str(project_dict['id']), 'user_id', project_dict['user_id'])
-    config.set(str(project_dict['id']), 'cache_count', project_dict['cache_count'])
-    config.set(str(project_dict['id']), 'color', project_dict['color'])
-    config.set(str(project_dict['id']), 'indent', project_dict['indent'])
-    config.set(str(project_dict['id']), 'item_order', project_dict['item_order'])
-    config.set(str(project_dict['id']), 'collapsed', project_dict['collapsed'])
-    with open(project_file, 'ab') as configfile:
-        config.write(configfile)
-
-def add_project(project_name):
-
-    conf = GetUserInfo()
-    token = conf.api_token
-
-    project_name = " ".join(project_name)
-    status = backend.project.add_project(token, project_name)
-
-    # status has two types, the if/else condition must start with status
-    # status=False , status ('ok', '200', 'OK') 
-    if not status:
-        print "ERROR: Not able to create \"%s\" at Todoist.com" % project_name
-    elif status[1] == 200:
-        print "\"%s\" is created at Todoist.com" % project_name
 
     # Add project to project_file
     project_dict = status[0]

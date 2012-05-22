@@ -76,12 +76,11 @@ To show all available projects::
 
     cit projects
 
-Creating a new task is also very simple. Just write it and append the project
-name or order number at the end. (Use quotes only for items that contains
-special characters.)::
+Creating a task is simple. The command below adds "take out the trash" to the
+project +home. You don't need to wrap it in quotes. But a project name with +
+prefix is needed::
 
-    cit add This is a task +1
-    cit add This is a task +ProjectName
+    cit add take out the trash +home
 
 Creating a new project with the name *Work*::
 
