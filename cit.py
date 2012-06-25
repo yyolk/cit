@@ -7,6 +7,7 @@ import json
 import argparse
 import ConfigParser
 import textwrap
+from clint.textui import colored
 
 import backend.user
 import backend.project
@@ -193,7 +194,8 @@ def list_all_items():
 
                 print item_order.rjust(2),
                 print '  ' * (int(indent) - 1),
-                print project_name.ljust(10),
+                print (getattr(colored, colored.COLORS[0])(project_name.ljust(10))),
+                #print project_name.ljust(10),
                 print content
 
 def list_project_items(args):
@@ -243,6 +245,7 @@ def list_projects():
         indent = config.get(id_name, 'indent')
         item_order = config.get(id_name, 'item_order')
         total_items = config.get(id_name, 'cache_count')
+        
 
         print section_name.ljust(10),
         print '  ' * (int(indent) - 1),
