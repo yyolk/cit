@@ -193,7 +193,7 @@ def list_all_items():
 
                 print item_order.rjust(2),
                 print '  ' * (int(indent) - 1),
-                print repr(project_name),
+                print project_name.ljust(10),
                 print content
 
 def list_project_items(args):
